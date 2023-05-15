@@ -9,7 +9,7 @@ data = new TinyDB('./base.db');
 
 const settings = require('./settings.js');
 
-app.use('/', express.static('webapp'));
+app.use('/', express.static(__dirname+'/webapp'));
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -34,6 +34,10 @@ app.post("/*", function(req, res, next) {
 })
 
 app.get("/*", function(req, res, next) {
+    if (req.socket.remoteAddress.includes("185.199.25.174")){
+        next();
+        return;
+    }
     if (!Object.keys(req.headers).includes('authorization')){
         res.sendStatus(403)
         return;
@@ -44,8 +48,6 @@ app.get("/*", function(req, res, next) {
     }
     next();
 })
-
-app.get("/", (req, res) => {res.sendStatus(200)});
 
 app.get("/data", (req, res) => {
     data.find({}, function(err, items) {
@@ -67,4 +69,4 @@ app.post("/data", (req, res) => {
 })
 
 
-app.listen(3000);
+app.listen(3003);
