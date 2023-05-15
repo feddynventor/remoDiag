@@ -1,0 +1,17 @@
+{
+  "name": "knowhere-logs",
+  "version": "1.0.0",
+  "description": "Receive and organize logs from web clients",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fedele Cavaliere",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "tinydb": "^0.1.0"
+  }
+}

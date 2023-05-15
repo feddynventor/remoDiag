@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <script src="jquery-3.5.1.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="table.css">
+        <script src="jquery.dataTables.min.js"></script>
+        
+        <script>
+            $(document).ready(function () {
+                const getData = async () => {
+                    const data = await fetch('/data', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'n7ygyADfQTk6Rx7?vY9CckR!k?YmzVVA',
+                            'Content-Type': 'application/json',                                  
+                        }
+                    });
+                    const jsondata = await data.json();
+                    console.log(jsondata)
+                    initialiseTable(jsondata);
+                };
+
+                getData();
+                function initialiseTable(asyncData){
+                    console.log(asyncData);
+                    var table = $("#myTable").DataTable({
+                        data: asyncData,
+                        columns: [
+                        {
+                        data: "date",
+                        label: "Date"
+                        },
+                        {
+                        data: "ip",
+                        label: "IP"
+                        },
+                        {
+                        data: "ua",
+                        label: "UserAgent"
+                        },
+                        {
+                        data: "brand",
+                        label: "Brand"
+                        },
+                        {
+                        data: "defcon",
+                        label: "Defcon"
+                        },
+                        {
+                        data: "section",
+                        label: "Area"
+                        },
+                        {
+                        data: "msg",
+                        label: "Message"
+                        }
+                        ]
+                });
+         }
+        });
+        </script>
+    </head>
+
+    <body>
+        <div>
+            <table id="myTable" class="mdl-data-table" style="width:100%">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    <th>IP</th>
+                    <th>UA</th>
+                    <th>Brand</th>
+                    <th>Defcon</th>
+                    <th>Section</th>
+                    <th>Message</th>
+                </tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </body>
+
+</html>

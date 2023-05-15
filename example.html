@@ -1,0 +1,12 @@
+<html>
+    <script>
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://10.0.0.16:3000/data", true);
+        
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = () => {
+        //if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {}
+        };
+        xhr.send("msg="+encodeURI(msg)+"&defcon="+defcon+"&section="+section);
+    </script>
+</html>
