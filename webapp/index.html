@@ -12,7 +12,6 @@
                     const data = await fetch('/data', {
                         method: 'GET',
                         headers: {
-                            'Authorization': 'n7ygyADfQTk6Rx7?vY9CckR!k?YmzVVA',
                             'Content-Type': 'application/json',                                  
                         }
                     });
@@ -26,10 +25,11 @@
                     console.log(asyncData);
                     var table = $("#myTable").DataTable({
                         data: asyncData,
+                        order: [[0, 'desc']],
                         columns: [
                         {
                         data: "date",
-                        label: "Date"
+                        label: "Date",
                         },
                         {
                         data: "ip",

@@ -4,10 +4,12 @@ var cors = require('cors')
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }))
 
-const TinyDB = require('tinydb');
-data = new TinyDB('./base.db');
+console.log(__dirname)
 
-const settings = require('./settings.js');
+const TinyDB = require('tinydb');
+data = new TinyDB(__dirname+'/base.db');
+
+const settings = require(__dirname+'/settings.js');
 
 app.use('/', express.static(__dirname+'/webapp'));
 
@@ -23,7 +25,7 @@ app.use(cors({
 
 app.post("/*", function(req, res, next) {
     if (!Object.keys(req.headers).includes('user-agent')){
-        res.sendStatus(403)
+        res.sendStatus(400)
         return;
     }
     if (!req.headers['user-agent'].toLowerCase().includes(settings.useragent)){
@@ -34,19 +36,10 @@ app.post("/*", function(req, res, next) {
 })
 
 app.get("/*", function(req, res, next) {
-    if (req.socket.remoteAddress.includes("185.199.25.174")){
-        next();
-        return;
-    }
-    if (!Object.keys(req.headers).includes('authorization')){
-        res.sendStatus(403)
-        return;
-    }
-    if (!req.headers['authorization'].includes(settings.secret)){
+    if ( settings.allowedDataIP.filter(addr=>req.socket.remoteAddress.includes(addr)).length>0 )
+        next()
+    else
         res.sendStatus(401)
-        return;
-    }
-    next();
 })
 
 app.get("/data", (req, res) => {
@@ -56,15 +49,17 @@ app.get("/data", (req, res) => {
     });
 });
 
-app.post("/data", (req, res) => {
+app.post("/data", async (req, res) => {
     if ( !require('./interpreter').interpreter(req, res) ) res.sendStatus(501)
 
-    data.appendItem(req.body, (err)=>{
+    await data.appendItem(req.body, (err)=>{
+console.log(err)
         if (err){
-            res.sendStatus(500)
+            res.sendStatus(500).send(err)
             return;
         }
-        data.flush(); res.sendStatus(201)
+        data.flush();
+        res.sendStatus(201)
     });
 })
 
